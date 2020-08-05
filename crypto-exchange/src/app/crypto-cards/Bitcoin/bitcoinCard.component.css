@@ -1,0 +1,47 @@
+#card-intro{
+  background-color: #182532;
+  color: white;
+}
+#buySpan{
+  background-color: #39b965;
+  color: whitesmoke;
+  border: none;
+}
+#buyInput{
+  background-color: #39b965;
+  color: whitesmoke;
+  border: none;
+  padding-left: 10px;
+}
+#defaultInput{
+  background-color: #203046;
+  color: whitesmoke;
+  border: none;
+  padding-left: 10px;
+}
+#defaultSpan{
+  background-color: #203046;
+  color: whitesmoke;
+  border: none;
+}
+#sellSpan{
+  background-color: #e83745;
+  color: whitesmoke;
+  border: none;
+}
+#sellInput{
+  background-color: #e83745;
+  color: whitesmoke;
+  border: none;
+  padding-left: 10px;
+}
+
+*:focus {
+  outline: none;
+}
+/* To remove spin box from inputs */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
