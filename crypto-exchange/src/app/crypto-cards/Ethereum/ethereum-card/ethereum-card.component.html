@@ -1,18 +1,18 @@
-<!--BTC-->
+<!--Ethereum-->
 <div class="container mb-5">
   <div id="card-intro" class="card mt-3 shadow-sm">
     <div class="card-body">
-      <h3 class="card-title">Bitcoin (BTC) - ${{crypto | number:'1.2-2'}}</h3>
-      <canvas id="myChart"></canvas>
-      <p class="card-text mt-3"></p>
+      <h3 class="card-title">Ethereum (ETH) - ${{crypto | number:'1.2-2'}}</h3>
+      <canvas id="ethChart"></canvas>
+      <!--chart goes here-->
       <hr style="background-color:#303b47;">
-      <button class="btn btn-primary mb-2"  style="background-color: #6490f1;"type="button" data-toggle="collapse" data-target="#mCollapse"
-      aria-expanded="false" aria-controls="mCollapse">Buy/Sell</button>
+      <button class="btn btn-primary mb-2"  style="background-color: #6490f1;"type="button" data-toggle="collapse" data-target="#mCollapse1"
+      aria-expanded="false" aria-controls="mCollapse1">Buy/Sell</button>
       <!--Buy/Sell collapse-->
       <div class="row">
         <div class="col">
-          <div class="collapse" id="mCollapse">
-            <div class="card card-body allign-middle" style="background-color:#182532;">
+          <div class="collapse" id="mCollapse1">
+            <div class="card card-body" style="background-color:#182532;">
               <!--Inputs. Convert btc to USD and vice versa when user types a number-->
               <div class="container">
                 <!--Buy-->
@@ -23,9 +23,9 @@
                     <div class="input-group-append">
                       <span class="input-group-text" id="defaultSpan">USD</span>
                     </div>
-                    <input type="text" id="buyInput" placeholder="0" type="number" [(ngModel)]="BTC1" value={{result1BTC}}>
+                    <input type="text" id="buyInput" placeholder="0" type="number" [(ngModel)]="ETH1" value={{result1ETH}}>
                     <div class="input-group-append">
-                      <span class="input-group-text" id="buySpan">BTC</span>
+                      <span class="input-group-text" id="buySpan">ETH</span>
                     </div>
                   </div>
                 </div>
@@ -33,9 +33,9 @@
                 <div class="row">
                   <h4>SELL</h4>
                   <div class="input-group">
-                    <input type="text" id="defaultInput" placeholder="0" type="number" [(ngModel)]="BTC2" value={{result2BTC}}>
+                    <input type="text" id="defaultInput" placeholder="0" type="number" [(ngModel)]="ETH2" value={{result2ETH}}>
                     <div class="input-group-append">
-                      <span class="input-group-text" id="defaultSpan">BTC</span>
+                      <span class="input-group-text" id="defaultSpan">ETH</span>
                     </div>
                     <input type="text" id="sellInput" placeholder="0" type="number" [(ngModel)]="USD2" value={{result2USD}}>
                     <div class="input-group-append">
