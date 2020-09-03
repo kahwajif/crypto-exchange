@@ -1,0 +1,25 @@
+<div class="signin-form mt-5">
+  <form method="post">
+    <a [routerLink]="['/']" routerLinkActive="active">
+      <img class="mx-auto d-block" id="c-x" src="../assets/c-x.png" alt="Crypto-X"/>
+    </a>
+    <h2 class = "mt-4">Sign In</h2>
+    <div class="form-group">
+    <div class="input-group">
+      <input type="text" class="form-control" name="username" placeholder="Username" required="required">
+    </div>
+    </div>
+    <div class="form-group">
+    <div class="input-group">
+      <input type="text" class="form-control" name="password" placeholder="Password" required="required">
+    </div>
+      </div>
+    <div class="form-group">
+    <button type="submit" class="btn btn-primary btn-block btn-lg">Sign Up</button>
+    </div>
+    <div class="text-center">
+		<a id="forgotPass" href="#">Forgot Password?</a>
+	  </div>
+  </form>
+<div class="text-center">Don't have an account? <a [routerLink]="['/sign-up']" routerLinkActive="active">Register here</a>.</div>
+

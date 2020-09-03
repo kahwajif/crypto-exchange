@@ -1,0 +1,17 @@
+nav{
+  background-color: #182532;
+}
+a{
+  color: #626262;
+}
+a:hover{
+  color:white;
+}
+.nav-link:hover{
+  color:white;
+}
+
+#crypto-x{
+  width: 150px;
+  height: 20px;
+}

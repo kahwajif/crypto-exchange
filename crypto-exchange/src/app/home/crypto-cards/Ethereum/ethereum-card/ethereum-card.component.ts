@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Chart } from 'chart.js'
-import { DataService } from 'src/app/data.service';
+import { DataService } from 'src/app/services/data.service';
+
 
 @Component({
   selector: 'app-ethereum-card',
@@ -76,12 +76,14 @@ export class EthereumCardComponent implements OnInit {
           labels: data.historicTime,
           datasets: [
             {
-              label: "Ethereum",
-              pointRadius: 2,
-              pointBorderWidth: 2,
+              label: "Ethereum ",
+              pointRadius: 3,
+              pointBorderWidth: 1,
               pointBackgroundColor: "#0db1c0",
               borderColor: "#0db1c0",
               borderWidth: '1',
+              fontColor: 'white',
+              defaultFontSize: 20,
               data: data.historicY
             }
           ]
@@ -104,12 +106,27 @@ export class EthereumCardComponent implements OnInit {
                 position: 'right',
                 ticks: {
                   beginAtZero: false,
+                  fontSize: 15,
+                  fontColor: 'white',
                   callback: function(value, index, values) {
                     return '$' + value;
                 }
                 }
               }
-            ]
+            ],
+            xAxes: [
+              {
+                gridLines:{
+                  display: false
+                },
+                ticks: {
+                  fontColor: 'white',
+                  fontSize: 15,
+                  maxRotation: 0,
+                  minRotation: 0
+                }
+              }
+            ],
           },
           layout: {
             padding: {

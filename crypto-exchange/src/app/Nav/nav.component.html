@@ -1,21 +1,25 @@
-<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #182532;">
-  <a class="navbar-brand" href="#">Crypto-X</a>
+<div *ngIf="nav.visible">
+  <nav class="navbar navbar-expand-lg navbar-dark mb-5">
+    <a class="navbar-brand" [routerLink]="['/']" routerLinkActive="active">
+      <img id="crypto-x" src="../assets/crypto-x.png" alt="Crypto-X"/>
+    </a>
 
-  <div class="collapse navbar-collapse" >
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" href="#">Wallet</a>
-      </li>
-      <li class="nav-item active">
-        <a class="nav-link" href="#">Fees</a>
-      </li>
-      <li class="nav-item active">
-        <a class="nav-link" href="#">Log In</a>
-      </li>
-    </ul>
-    <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-      <button type="button" class="btn btn-success" style="background-color: #6490f1;">Get Started</button>
-    </form>
-  </div>
-</nav>
+    <div class="collapse navbar-collapse" >
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="#">Wallet</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Fees</a>
+        </li>
+      </ul>
+      <div *ngIf="!isSignedIn">
+        <a class="nav-link" [routerLink]="['/sign-in']" routerLinkActive="active">Sign In</a>
+      </div>
+      <div *ngIf="isSignedIn">
+        <a class="nav-link" [routerLink]="['/']" routerLinkActive="active">Log Out</a>
+      </div>
+      <button class="btn btn-primary" [routerLink]="['/sign-up']" routerLinkActive="active">Register</button>
+    </div>
+  </nav>
+</div>

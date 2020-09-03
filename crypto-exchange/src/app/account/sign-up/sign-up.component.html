@@ -1,0 +1,39 @@
+<div class="signup-form mt-5">
+  <form method="post">
+    <a [routerLink]="['/']" routerLinkActive="active">
+      <img class="mx-auto d-block" id="c-x" src="../assets/c-x.png" alt="Crypto-X"/>
+    </a>
+  <h2 class = "mt-3">Create Account</h2>
+  <p class="lead">Buy crypto quick after signing up</p>
+      <div class="form-group">
+    <div class="input-group">
+      <span class="input-group-addon"><i class="fa fa-user"></i></span>
+      <input type="text" class="form-control" name="username" placeholder="Username" required="required">
+    </div>
+      </div>
+      <div class="form-group">
+    <div class="input-group">
+      <span class="input-group-addon"><i class="fa fa-paper-plane"></i></span>
+      <input type="email" class="form-control" name="email" placeholder="Email Address" required="required">
+    </div>
+      </div>
+  <div class="form-group">
+    <div class="input-group">
+      <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+      <input type="text" class="form-control" name="password" placeholder="Password" required="required">
+    </div>
+      </div>
+  <div class="form-group">
+    <div class="input-group">
+      <span class="input-group-addon">
+      </span>
+      <input type="text" class="form-control" name="confirm_password" placeholder="Confirm Password" required="required">
+    </div>
+      </div>
+  <div class="form-group">
+          <button type="submit" class="btn btn-primary btn-block btn-lg">Sign Up</button>
+      </div>
+  <p class="small text-center">By clicking the Sign Up button, you agree to our <br><a href="#">Terms &amp; Conditions</a>, and <a href="#">Privacy Policy</a>.</p>
+  </form>
+<div class="text-center">Already have an account? <a [routerLink]="['/sign-in']" routerLinkActive="active">Login here</a>.</div>
+</div>

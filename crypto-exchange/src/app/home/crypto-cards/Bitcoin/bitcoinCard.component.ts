@@ -1,9 +1,7 @@
-import { Component, OnInit, ModuleWithComponentFactories } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
 import { Chart } from 'chart.js'
-import { fromEventPattern } from 'rxjs';
-import { async } from 'rxjs/internal/scheduler/async';
-import { DataService } from 'src/app/data.service';
+import { DataService } from 'src/app/services/data.service';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-bitcoinCard',
@@ -78,11 +76,13 @@ export class BitcoinCardComponent implements OnInit{
           datasets: [
             {
               label: "Bitcoin",
-              pointRadius: 2,
-              pointBorderWidth: 2,
+              pointRadius: 3,
+              pointBorderWidth: 1,
               pointBackgroundColor: "#eea231",
               borderWidth: '1',
               borderColor: "#eea231",
+              fontColor: 'white',
+              defaultFontSize: 20,
               data: data.historicY
             }
           ]
@@ -105,12 +105,27 @@ export class BitcoinCardComponent implements OnInit{
                 position: 'right',
                 ticks: {
                   beginAtZero: false,
+                  fontSize: 15,
+                  fontColor: 'white',
                   callback: function(value, index, values) {
                     return '$' + value;
-                }
+                  }
+                },
+              }
+            ],
+            xAxes: [
+              {
+                gridLines:{
+                  display: false
+                },
+                ticks: {
+                  fontColor: 'white',
+                  fontSize: 15,
+                  maxRotation: 0,
+                  minRotation: 0
                 }
               }
-            ]
+            ],
           },
           layout: {
             padding: {
@@ -128,19 +143,90 @@ export class BitcoinCardComponent implements OnInit{
     chartIt();
   }
 
-
-  get result1BTC(){
-    return Number(this.USD1*this.crypto);
-    //check if funds are insufficient or amount exceeds limit(spending too much). Check NDAX
-  }
   get result1USD(){
-    return Number(this.BTC1*this.USD).toFixed(2);
+    return Number(this.USD1*this.USD);
+  }
+  get result1BTC(){
+    return Number(this.BTC1*this.crypto);
   }
   get result2BTC(){
-    return Number(this.USD2*this.crypto).toFixed(8);
+    return Number(this.USD2*this.crypto);
   }
   get result2USD(){
-    return Number(this.BTC2*this.USD).toFixed(2);
+    return Number(this.BTC2*this.USD);
+  }
+
+  check1: boolean;
+  check2: boolean;
+  checkAmount1(){
+    this.checkNegative();
+    if(this.USD1 < 0 || this.BTC1 < 0){
+      this.USD1 = 0;
+      this.BTC1 = 0
+    }
+    else if(this.USD1 > 100000 || this.BTC1 > 99){
+      this.check2 = true;
+      this.check1 = false;
+    }
+    else if(this.USD1 || this.BTC1){
+      this.check1 = true;
+      this.check2 = false;
+    }
+    else
+      return 0;
+    return 1;
+  }
+
+  check3: boolean;
+  check4: boolean;
+  checkAmount2(){
+    this.checkNegative();
+    if(this.USD2 > 100000 || this.BTC2 > 99){
+      this.check4 = true;
+      this.check3 = false;
+    }
+    else if(this.USD2 || this.BTC2){
+      this.check3 = true;
+      this.check4 = false;
+    }
+    else
+      return 0;
+    return 1;
+  }
+
+  checkNegative(){
+    var a = document.getElementById('defaultInput');
+    var b = document.getElementById('buyInput');
+    var c = document.getElementById('sellInput');
+    var d = document.getElementById('defaultInput2');
+    a.onkeydown = function(e) {
+      if(!((e.keyCode > 95 && e.keyCode < 106)
+        || (e.keyCode > 47 && e.keyCode < 58)
+        || e.keyCode == 8)) {
+          return false;
+      }
+    }
+    b.onkeydown = function(e) {
+      if(!((e.keyCode > 95 && e.keyCode < 106)
+        || (e.keyCode > 47 && e.keyCode < 58)
+        || e.keyCode == 8)) {
+          return false;
+      }
+    }
+    c.onkeydown = function(e) {
+      if(!((e.keyCode > 95 && e.keyCode < 106)
+        || (e.keyCode > 47 && e.keyCode < 58)
+        || e.keyCode == 8)) {
+          return false;
+      }
+    }
+    d.onkeydown = function(e) {
+      if(!((e.keyCode > 95 && e.keyCode < 106)
+        || (e.keyCode > 47 && e.keyCode < 58)
+        || e.keyCode == 8)) {
+          return false;
+      }
+    }
   }
 
 }
