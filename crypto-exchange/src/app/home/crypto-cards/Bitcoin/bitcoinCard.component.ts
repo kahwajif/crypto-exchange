@@ -10,6 +10,7 @@ import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 })
 
 export class BitcoinCardComponent implements OnInit{
+  chart: any;
   crypto: any;
   USD: any;
 
@@ -18,6 +19,10 @@ export class BitcoinCardComponent implements OnInit{
   BTC1: number;;
   USD2: number;;
   BTC2: number;;
+
+  canvas1: boolean;
+  canvas2: boolean;
+  canvas3: boolean;
 
   constructor(private _data:DataService){
   }
@@ -43,7 +48,7 @@ export class BitcoinCardComponent implements OnInit{
       var year = date.getFullYear();
       var month = months_arr[date.getMonth()];
       var day = date.getDate();
-      var realDate = month +' '+ day;
+      var realDate = month +' '+ day + ' ' + year;
       return realDate;
     }
 
@@ -53,9 +58,13 @@ export class BitcoinCardComponent implements OnInit{
       let historicX = [];
       let historicY = [];
       let historicTime = [];
-      const res = await fetch('https://min-api.cryptocompare.com/data/v2/histoday?fsym=BTC&tsym=USD&limit=30&api_key=621def888ea82cbdd98c3ba9f10fbd487e222c0663c524f468b1c3495192cb89');
+
+      let monthHistoricY =[];
+      let monthHistoricTime = []
+      const res = await fetch('https://min-api.cryptocompare.com/data/v2/histoday?fsym=BTC&tsym=USD&limit=1825&api_key=621def888ea82cbdd98c3ba9f10fbd487e222c0663c524f468b1c3495192cb89');
       const data = await res.json();
       historicData = data.Data.Data;
+      //5 years
       for (let value of historicData){
         historicX.push(value.time);
         historicY.push(value.close);
@@ -64,15 +73,21 @@ export class BitcoinCardComponent implements OnInit{
         var s = convertTime(UNIX_time);
         historicTime.push(s);
       }
-      return {historicTime, historicY};
-    }
+      //1 month
+      for(let i=0;i<30;i++){
+        monthHistoricY.push(historicY[1795+i])
+        monthHistoricTime.push(historicTime[1795+i])
+      }
+      console.log(monthHistoricY)
 
+      return {monthHistoricTime, monthHistoricY, historicTime, historicY};
+    }
     async function chartIt(){
       const data = await getData();
       const chart = new Chart('myChart', {
         type: "line",
         data: {
-          labels: data.historicTime,
+          labels: data.monthHistoricTime,
           datasets: [
             {
               label: "Bitcoin",
@@ -83,7 +98,7 @@ export class BitcoinCardComponent implements OnInit{
               borderColor: "#eea231",
               fontColor: 'white',
               defaultFontSize: 20,
-              data: data.historicY
+              data: data.monthHistoricY
             }
           ]
         },
@@ -137,12 +152,13 @@ export class BitcoinCardComponent implements OnInit{
           }
         }
       });
-
     }
 
     chartIt();
   }
 
+
+  //converts USD to BTC and vice versa
   get result1USD(){
     return Number(this.USD1*this.USD);
   }

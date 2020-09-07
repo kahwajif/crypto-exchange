@@ -13,7 +13,8 @@ import { EthereumCardComponent } from './home/crypto-cards/Ethereum/ethereum-car
 import { SideNavComponent } from './side-nav/side-nav.component';
 import { SignUpComponent } from './account/sign-up/sign-up.component';
 import { HomeComponent } from './home/home.component';
-import { SignInComponent } from './account/sign-in/sign-in.component'
+import { SignInComponent } from './account/sign-in/sign-in.component';
+import { FooterComponent } from './footer/footer.component'
 
 @NgModule({
   declarations: [
@@ -25,12 +26,13 @@ import { SignInComponent } from './account/sign-in/sign-in.component'
     SignUpComponent,
     HomeComponent,
     SignInComponent,
+    FooterComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
   ],
   providers: [DataService, NavbarService],
   bootstrap: [AppComponent]

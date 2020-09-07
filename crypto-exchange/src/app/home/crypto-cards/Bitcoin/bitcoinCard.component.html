@@ -4,7 +4,17 @@
     <div class="card-body">
       <h3 class="card-title">Bitcoin (BTC) - ${{crypto | number:'1.2-2'}}</h3>
       <canvas id="myChart"></canvas>
-      <p class="card-text mt-3"></p>
+
+      <div class="d-flex justify-content-end mt-3">
+        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+          <label class="btn btn-outline-primary active">
+            <input type="radio" name="options" id="option1" autocomplete="off" checked (click) = "canvas1 = true">1 Month</label>
+          <label class="btn btn-outline-primary">
+            <input type="radio" name="options" id="option2" autocomplete="off" (click) = "canvas2 = true">1 Year</label>
+          <label class="btn btn-outline-primary">
+            <input type="radio" name="options" id="option3" autocomplete="off" (click) = "canvas3 = true">5 Years</label>
+        </div>
+      </div>
       <hr style="background-color:#303b47;">
       <button class="btn btn-primary mb-2" type="button" data-toggle="collapse" data-target="#mCollapse"
       aria-expanded="false" aria-controls="mCollapse">Buy/Sell</button>
@@ -53,12 +63,12 @@
             <div *ngIf="checkAmount2() && check3">
               <button class="btn mb-2" style="background-color: #e83745; color:white">BUY BTC</button>
             </div>
+            <div *ngIf="checkAmount2() && check4" class="alert alert-danger" role="alert">
+              Amount exceeds maximum!
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
 </div>
-
-<!--look at how info is increasing or decreasing-->
-<!--if open- close = positive, then red. if open - close= negative, then green-->
