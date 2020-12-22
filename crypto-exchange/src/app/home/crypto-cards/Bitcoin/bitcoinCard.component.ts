@@ -45,10 +45,10 @@ export class BitcoinCardComponent implements OnInit{
     function convertTime(UNIX_time){
       var months_arr = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
       var date = new Date(UNIX_time*1000);
-      var year = date.getFullYear();
+      //var year = date.getFullYear();
       var month = months_arr[date.getMonth()];
       var day = date.getDate();
-      var realDate = month +' '+ day + ' ' + year;
+      var realDate = month +' '+ day;//+year
       return realDate;
     }
 
@@ -137,7 +137,8 @@ export class BitcoinCardComponent implements OnInit{
                   fontColor: 'white',
                   fontSize: 15,
                   maxRotation: 0,
-                  minRotation: 0
+                  minRotation: 0,
+                  
                 }
               }
             ],
@@ -215,6 +216,7 @@ export class BitcoinCardComponent implements OnInit{
     var b = document.getElementById('buyInput');
     var c = document.getElementById('sellInput');
     var d = document.getElementById('defaultInput2');
+
     a.onkeydown = function(e) {
       if(!((e.keyCode > 95 && e.keyCode < 106)
         || (e.keyCode > 47 && e.keyCode < 58)
