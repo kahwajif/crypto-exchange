@@ -14,7 +14,8 @@ import { SideNavComponent } from './side-nav/side-nav.component';
 import { SignUpComponent } from './account/sign-up/sign-up.component';
 import { HomeComponent } from './home/home.component';
 import { SignInComponent } from './account/sign-in/sign-in.component';
-import { FooterComponent } from './footer/footer.component'
+import { FooterComponent } from './footer/footer.component';
+import { DogeCardComponent } from './home/crypto-cards/doge-card/doge-card.component'
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { FooterComponent } from './footer/footer.component'
     HomeComponent,
     SignInComponent,
     FooterComponent,
+    DogeCardComponent,
   ],
   imports: [
     BrowserModule,

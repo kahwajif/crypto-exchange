@@ -26,7 +26,13 @@ export class BitcoinCardComponent implements OnInit{
 
   constructor(private _data:DataService){
   }
+  bruh(){
+    this._data.getPricesInUSD()
+    .subscribe(res=>{
+      this.crypto = res['BTC'].USD;
+  });
 
+  }
   ngOnInit(){
 
     //get ETH current price data
@@ -40,122 +46,8 @@ export class BitcoinCardComponent implements OnInit{
         this.USD = res['BTC'];
     });
 
-    //console.log(this.historicX,this.historicY)
-
-    function convertTime(UNIX_time){
-      var months_arr = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-      var date = new Date(UNIX_time*1000);
-      //var year = date.getFullYear();
-      var month = months_arr[date.getMonth()];
-      var day = date.getDate();
-      var realDate = month +' '+ day;//+year
-      return realDate;
-    }
-
     //get BTC historical data
-    async function getData(){
-      let historicData;
-      let historicX = [];
-      let historicY = [];
-      let historicTime = [];
-
-      let monthHistoricY =[];
-      let monthHistoricTime = []
-      const res = await fetch('https://min-api.cryptocompare.com/data/v2/histoday?fsym=BTC&tsym=USD&limit=1825&api_key=621def888ea82cbdd98c3ba9f10fbd487e222c0663c524f468b1c3495192cb89');
-      const data = await res.json();
-      historicData = data.Data.Data;
-      //5 years
-      for (let value of historicData){
-        historicX.push(value.time);
-        historicY.push(value.close);
-      }
-      for(let UNIX_time of historicX){
-        var s = convertTime(UNIX_time);
-        historicTime.push(s);
-      }
-      //1 month
-      for(let i=0;i<30;i++){
-        monthHistoricY.push(historicY[1795+i])
-        monthHistoricTime.push(historicTime[1795+i])
-      }
-      console.log(monthHistoricY)
-
-      return {monthHistoricTime, monthHistoricY, historicTime, historicY};
-    }
-    async function chartIt(){
-      const data = await getData();
-      const chart = new Chart('myChart', {
-        type: "line",
-        data: {
-          labels: data.monthHistoricTime,
-          datasets: [
-            {
-              label: "Bitcoin",
-              pointRadius: 3,
-              pointBorderWidth: 1,
-              pointBackgroundColor: "#eea231",
-              borderWidth: '1',
-              borderColor: "#eea231",
-              fontColor: 'white',
-              defaultFontSize: 20,
-              data: data.monthHistoricY
-            }
-          ]
-        },
-        options: {
-          elements: {
-            point: {
-              radius: 0,
-              hitRadius: 5,
-              hoverRadius: 5
-            }
-          },
-          legend: {
-            display: false
-          },
-          scales: {
-            yAxes: [
-              {
-                display: true,
-                position: 'right',
-                ticks: {
-                  beginAtZero: false,
-                  fontSize: 15,
-                  fontColor: 'white',
-                  callback: function(value, index, values) {
-                    return '$' + value;
-                  }
-                },
-              }
-            ],
-            xAxes: [
-              {
-                gridLines:{
-                  display: false
-                },
-                ticks: {
-                  fontColor: 'white',
-                  fontSize: 15,
-                  maxRotation: 0,
-                  minRotation: 0,
-                  
-                }
-              }
-            ],
-          },
-          layout: {
-            padding: {
-              left: 0,
-              right: 0,
-              top: 0,
-              bottom: 0
-            }
-          }
-        }
-      });
-    }
-
-    chartIt();
+    this.chartMonth();
   }
 
 
@@ -247,4 +139,14 @@ export class BitcoinCardComponent implements OnInit{
     }
   }
 
+  chartFiveYears(){
+    this._data.chartFiveYears();
+  }
+  chartMonth(){
+    this._data.chartMonth();
+  }
+
+  chartYear(){
+    this._data.chartYear();
+  }
 }
