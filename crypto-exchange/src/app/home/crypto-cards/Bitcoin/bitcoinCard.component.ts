@@ -10,7 +10,6 @@ import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 })
 
 export class BitcoinCardComponent implements OnInit{
-  chart: any;
   crypto: any;
   USD: any;
 
@@ -26,30 +25,23 @@ export class BitcoinCardComponent implements OnInit{
 
   constructor(private _data:DataService){
   }
-  bruh(){
-    this._data.getPricesInUSD()
-    .subscribe(res=>{
-      this.crypto = res['BTC'].USD;
-  });
-
-  }
+  
   ngOnInit(){
 
-    //get ETH current price data
+    //get BTC current price data
     this._data.getPricesInUSD()
       .subscribe(res=>{
         this.crypto = res['BTC'].USD;
     });
-    // get USD in ETH
+    // get USD in BTC
     this._data.getPriceInCrypto()
       .subscribe(res=>{
         this.USD = res['BTC'];
     });
 
     //get BTC historical data
-    this.chartMonth();
+    this._data.bitcoinChart(1);
   }
-
 
   //converts USD to BTC and vice versa
   get result1USD(){
@@ -139,14 +131,8 @@ export class BitcoinCardComponent implements OnInit{
     }
   }
 
-  chartFiveYears(){
-    this._data.chartFiveYears();
-  }
-  chartMonth(){
-    this._data.chartMonth();
-  }
-
-  chartYear(){
-    this._data.chartYear();
+  changeData(x){
+    
+    this._data.bitcoinChart(x);
   }
 }

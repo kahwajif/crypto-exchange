@@ -9,12 +9,11 @@ import { DataService } from 'src/app/services/data.service';
   styleUrls: ['./ethereum-card.component.css']
 })
 export class EthereumCardComponent implements OnInit {
-  //objectKeys = Object.keys;
+
   crypto: any;
   USD: any;
 
-  BTCdata;
-  BTCdataHistoric;
+ 
   //for buy/sell inputs
   USD1: number;;
   ETH1: number;;
@@ -35,121 +34,15 @@ export class EthereumCardComponent implements OnInit {
       .subscribe(res=>{
         this.USD = res['ETH'];
     });
-
-
-
-    function convertTime(UNIX_time){
-      var months_arr = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-      var date = new Date(UNIX_time*1000);
-      var year = date.getFullYear();
-      var month = months_arr[date.getMonth()];
-      var day = date.getDate();
-      var realDate = month +' '+ day;
-      return realDate;
-    }
-
-    //get BTC historical data
-    async function getData(){
-      let historicData;
-      let historicX = [];
-      let historicY = [];
-      let historicTime = [];
-      const res = await fetch('https://min-api.cryptocompare.com/data/v2/histoday?fsym=ETH&tsym=USD&limit=30&api_key=621def888ea82cbdd98c3ba9f10fbd487e222c0663c524f468b1c3495192cb89');
-      const data = await res.json();
-      historicData = data.Data.Data;
-      for (let value of historicData){
-        historicX.push(value.time);
-        historicY.push(value.close);
-      }
-      for(let UNIX_time of historicX){
-        var s = convertTime(UNIX_time);
-        historicTime.push(s);
-      }
-      return {historicTime, historicY};
-    }
-
-    async function chartIt(){
-      const data = await getData();
-      const chart = new Chart('ethChart', {
-        type: "line",
-        data: {
-          labels: data.historicTime,
-          datasets: [
-            {
-              label: "Ethereum ",
-              pointRadius: 3,
-              pointBorderWidth: 1,
-              pointBackgroundColor: "#0db1c0",
-              borderColor: "#0db1c0",
-              borderWidth: '1',
-              fontColor: 'white',
-              defaultFontSize: 20,
-              data: data.historicY
-            }
-          ]
-        },
-        options: {
-          elements: {
-            point: {
-              radius: 0,
-              hitRadius: 5,
-              hoverRadius: 5
-            }
-          },
-          legend: {
-            display: false
-          },
-          scales: {
-            yAxes: [
-              {
-                display: true,
-                position: 'right',
-                ticks: {
-                  beginAtZero: false,
-                  fontSize: 15,
-                  fontColor: 'white',
-                  callback: function(value, index, values) {
-                    return '$' + value;
-                }
-                }
-              }
-            ],
-            xAxes: [
-              {
-                gridLines:{
-                  display: false
-                },
-                ticks: {
-                  fontColor: 'white',
-                  fontSize: 15,
-                  maxRotation: 0,
-                  minRotation: 0
-                }
-              }
-            ],
-          },
-          layout: {
-            padding: {
-              left: 0,
-              right: 0,
-              top: 0,
-              bottom: 0
-            }
-          }
-        }
-      });
-    }
-
-    chartIt();
+    this._data.ethereumChart(1);
   }
 
-
+//converts USD to ETH and vice versa
   get result1ETH(){
-    return Number(this.USD1*this.crypto);
-    //check if funds are insufficient or amount exceeds limit(spending too much). Check NDAX
+    return Number(this.USD1*this.USD);
   }
   get result1USD(){
-    return Number(this.ETH1*this.USD);
+    return Number(this.ETH1*this.crypto);
   }
   get result2ETH(){
     return Number(this.USD2*this.crypto);
@@ -158,5 +51,82 @@ export class EthereumCardComponent implements OnInit {
     return Number(this.ETH2*this.USD);
   }
 
+  check1: boolean;
+  check2: boolean;
+  checkAmount1(){
+    this.checkNegative();
+    if(this.USD1 < 0 || this.ETH1 < 0){
+      this.USD1 = 0;
+      this.ETH1 = 0
+    }
+    else if(this.USD1 > 100000 || this.ETH1 > 99){
+      this.check2 = true;
+      this.check1 = false;
+    }
+    else if(this.USD1 || this.ETH1){
+      this.check1 = true;
+      this.check2 = false;
+    }
+    else
+      return 0;
+    return 1;
+  }
 
+  check3: boolean;
+  check4: boolean;
+  checkAmount2(){
+    this.checkNegative();
+    if(this.USD2 > 100000 || this.ETH2 > 99){
+      this.check4 = true;
+      this.check3 = false;
+    }
+    else if(this.USD2 || this.ETH2){
+      this.check3 = true;
+      this.check4 = false;
+    }
+    else
+      return 0;
+    return 1;
+  }
+
+  checkNegative(){
+    var a = document.getElementById('defaultInput');
+    var b = document.getElementById('buyInput');
+    var c = document.getElementById('sellInput');
+    var d = document.getElementById('defaultInput2');
+
+    a.onkeydown = function(e) {
+      if(!((e.keyCode > 95 && e.keyCode < 106)
+        || (e.keyCode > 47 && e.keyCode < 58)
+        || e.keyCode == 8)) {
+          return false;
+      }
+    }
+    b.onkeydown = function(e) {
+      if(!((e.keyCode > 95 && e.keyCode < 106)
+        || (e.keyCode > 47 && e.keyCode < 58)
+        || e.keyCode == 8)) {
+          return false;
+      }
+    }
+    c.onkeydown = function(e) {
+      if(!((e.keyCode > 95 && e.keyCode < 106)
+        || (e.keyCode > 47 && e.keyCode < 58)
+        || e.keyCode == 8)) {
+          return false;
+      }
+    }
+    d.onkeydown = function(e) {
+      if(!((e.keyCode > 95 && e.keyCode < 106)
+        || (e.keyCode > 47 && e.keyCode < 58)
+        || e.keyCode == 8)) {
+          return false;
+      }
+    }
+  }
+
+  changeData(x){
+    
+    this._data.ethereumChart(x);
+  }
 }

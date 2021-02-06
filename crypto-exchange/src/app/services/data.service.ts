@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Chart } from 'chart.js'
+import { convertUpdateArguments } from '@angular/compiler/src/compiler_util/expression_converter';
 
 const API_KEY = '621def888ea82cbdd98c3ba9f10fbd487e222c0663c524f468b1c3495192cb89'
 
@@ -31,57 +32,66 @@ export class DataService {
     var year = date.getFullYear();
     var month = months_arr[date.getMonth()];
     var day = date.getDate();
+    
     var realDate = month +' '+ day + ' ' + year;
     return realDate;
   }
 
-  async getData(){
-    let historicData;
-      let historicX = [];
-      let historicY = [];
-      let historicTime = [];
-      let historicYears = [];
-      let monthHistoricY =[];
-      let monthHistoricTime = [];
-      let yearHistoricTime = [];
-      let yearHistoricY = [];
-      const res = await fetch('https://min-api.cryptocompare.com/data/v2/histoday?fsym=BTC&tsym=USD&limit=1825&api_key=621def888ea82cbdd98c3ba9f10fbd487e222c0663c524f468b1c3495192cb89');
-      const data = await res.json();
-      historicData = data.Data.Data;
-      //5 years
-      for (let value of historicData){
-        historicX.push(value.time);
-        historicY.push(value.close);
-      }
-      for(let UNIX_time of historicX){
-        var s = this.convertTime(UNIX_time);
-        historicTime.push(s);
-      }
-      //5 year time
-      for(let i=0;i<1825;i++){
-        historicYears.push(historicTime[i].split(" ").splice(-1));
-      }
-      //1 year
-      for(let i=0;i<365;i++){
-        yearHistoricY.push(historicY[1460+i])
-        yearHistoricTime.push(historicTime[1460+i]);
-      }
 
-      //1 month
-      for(let i=0;i<30;i++){
-        monthHistoricY.push(historicY[1795+i])
-        monthHistoricTime.push(historicTime[1795+i].substring(0, historicTime[1795+i].lastIndexOf(" ")));
-      }
-      
-      return {monthHistoricTime, monthHistoricY, historicTime, historicY, historicYears, yearHistoricTime, yearHistoricY};
+  //===============================================BTC START===================================================
+  async getBTC(){
+    let historicData;
+    let historicX = [];
+    let historicY = [];
+    let historicTime = [];
+    let historicYears = [];
+    let monthHistoricY =[];
+    let monthHistoricTime = [];
+    let yearHistoricTime = [];
+    let yearHistoricY = [];
+    const res = await fetch('https://min-api.cryptocompare.com/data/v2/histoday?fsym=BTC&tsym=USD&limit=1825&api_key=621def888ea82cbdd98c3ba9f10fbd487e222c0663c524f468b1c3495192cb89');
+    const data = await res.json();
+    historicData = data.Data.Data;
+    //5 years
+    for (let value of historicData){
+      historicX.push(value.time);
+      historicY.push(value.close);
+    }
+    for(let UNIX_time of historicX){
+      var s = this.convertTime(UNIX_time);
+      historicTime.push(s);
+    }
+    //5 year time
+    for(let i=0;i<1825;i++){
+      var removeDay = historicTime[i].substring(historicTime[i].indexOf(" "), historicTime[i].lastIndexOf(" "));
+      var corrected = historicTime[i].replace(removeDay, "");
+      historicYears.push(corrected);
+    }
+    //1 year
+    for(let i=0;i<365;i++){
+      yearHistoricY.push(historicY[1460+i])
+      var removeDay = historicTime[1460+i].substring(historicTime[1460+i].indexOf(" "), historicTime[1460+i].lastIndexOf(" "));
+      var corrected = historicTime[1460+i].replace(removeDay, "");
+      yearHistoricTime.push(corrected);
+    }
+
+    //1 month
+    for(let i=0;i<30;i++){
+      monthHistoricY.push(historicY[1795+i])
+      monthHistoricTime.push(historicTime[1795+i].substring(0, historicTime[1795+i].lastIndexOf(" ")));
+    }
+
+    return {monthHistoricTime, monthHistoricY, historicY, historicYears, yearHistoricTime, yearHistoricY};
   }
 
-  async chartMonth(){
-    const data = await this.getData();
-    const chart = new Chart('myChart', {
+  async bitcoinChart(x){
+    const data = await this.getBTC();
+    let currentTime, currentY;
+
+    var chart = new Chart('myChart', {
       type: "line",
       data: {
-        labels: data.monthHistoricTime,
+        labels: currentTime,
         datasets: [
           {
             label: "Bitcoin",
@@ -92,80 +102,7 @@ export class DataService {
             borderColor: "#eea231",
             fontColor: 'white',
             defaultFontSize: 20,
-            data: data.monthHistoricY
-          }
-        ]
-      },
-      options: {
-        elements: {
-          point: {
-            radius: 0,
-            hitRadius: 5,
-            hoverRadius: 5
-          }
-        },
-        legend: {
-          display: false
-        },
-        scales: {
-          yAxes: [
-            {
-              display: true,
-              position: 'right',
-              ticks: {
-                beginAtZero: false,
-                fontSize: 15,
-                fontColor: 'white',
-                callback: function(value, index, values) {
-                  return '$' + value;
-                }
-              },
-            }
-          ],
-          xAxes: [
-            {
-              gridLines:{
-                display: false
-              },
-              ticks: {
-                fontColor: 'white',
-                fontSize: 15,
-                maxRotation: 0,
-                minRotation: 0,
-                
-              }
-            }
-          ],
-        },
-        layout: {
-          padding: {
-            left: 0,
-            right: 0,
-            top: 0,
-            bottom: 0
-          }
-        }
-      }
-    });
-  }
-
-  async chartFiveYears(){
-    const data = await this.getData();
-    const chart = new Chart('myChart', {
-      type: "line",
-      data: {
-        labels: data.historicYears,
-        datasets: [
-          {
-            label: "Bitcoin",
-            pointRadius: 0,
-            pointBorderWidth: 1,
-            pointBackgroundColor: "#eea231",
-            borderWidth: '1',
-            borderColor: "#eea231",
-            fontColor: 'white',
-            defaultFontSize: 20,
-            data: data.historicY
+            data: currentY
           }
         ]
       },
@@ -221,79 +158,173 @@ export class DataService {
         }
       }
     });
+    
+    function updateChart(x){
+      if(x == 1){ //month
+        
+        chart.data.datasets[0].data = data.monthHistoricY;
+        chart.data.labels = data.monthHistoricTime;
+      }
+      else if(x == 2){ //1 year
+        chart.data.datasets[0].data = data.yearHistoricY;
+        chart.data.labels = data.yearHistoricTime;
+        chart.data.datasets[0].pointRadius = 0;
+      }
+      else if(x == 3){ // 5 years
+
+        chart.data.datasets[0].data = data.historicY;
+        chart.data.labels = data.historicYears;
+        chart.data.datasets[0].pointRadius = 0;
+      }
+      chart.update();
+    }
+    updateChart(x);
+  }
+//===============================================BTC END===================================================
+//===============================================ETH START=================================================
+async getETH(){
+  let historicData;
+  let historicX = [];
+  let historicY = [];
+  let historicTime = [];
+  let historicYears = [];
+  let monthHistoricY =[];
+  let monthHistoricTime = [];
+  let yearHistoricTime = [];
+  let yearHistoricY = [];
+  const res = await fetch('https://min-api.cryptocompare.com/data/v2/histoday?fsym=ETH&tsym=USD&limit=1825&api_key=621def888ea82cbdd98c3ba9f10fbd487e222c0663c524f468b1c3495192cb89');
+  const data = await res.json();
+  historicData = data.Data.Data;
+  //5 years
+  for (let value of historicData){
+    historicX.push(value.time);
+    historicY.push(value.close);
+  }
+  for(let UNIX_time of historicX){
+    var s = this.convertTime(UNIX_time);
+    historicTime.push(s);
+  }
+  //5 year time
+  for(let i=0;i<1825;i++){
+    var removeDay = historicTime[i].substring(historicTime[i].indexOf(" "), historicTime[i].lastIndexOf(" "));
+    var corrected = historicTime[i].replace(removeDay, "");
+    historicYears.push(corrected);
+  }
+  //1 year
+  for(let i=0;i<365;i++){
+    yearHistoricY.push(historicY[1460+i])
+    var removeDay = historicTime[1460+i].substring(historicTime[1460+i].indexOf(" "), historicTime[1460+i].lastIndexOf(" "));
+    var corrected = historicTime[1460+i].replace(removeDay, "");
+    yearHistoricTime.push(corrected);
   }
 
-  async chartYear(){
-    const data = await this.getData();
-    const chart = new Chart('myChart', {
-      type: "line",
-      data: {
-        labels: data.yearHistoricTime,
-        datasets: [
-          {
-            label: "Bitcoin",
-            pointRadius: 0,
-            pointBorderWidth: 1,
-            pointBackgroundColor: "#eea231",
-            borderWidth: '1',
-            borderColor: "#eea231",
-            fontColor: 'white',
-            defaultFontSize: 20,
-            data: data.yearHistoricY
-          }
-        ]
+  //1 month
+  for(let i=0;i<30;i++){
+    monthHistoricY.push(historicY[1795+i])
+    monthHistoricTime.push(historicTime[1795+i].substring(0, historicTime[1795+i].lastIndexOf(" ")));
+  }
+
+  return {monthHistoricTime, monthHistoricY, historicY, historicYears, yearHistoricTime, yearHistoricY};
+}
+
+async ethereumChart(x){
+  const data = await this.getETH();
+  let currentTime, currentY;
+
+  var chart = new Chart('ethChart', {
+    type: "line",
+    data: {
+      labels: currentTime,
+      datasets: [
+        {
+          label: "Ethereum ",
+          pointRadius: 3,
+          pointBorderWidth: 1,
+          pointBackgroundColor: "#0db1c0",
+          borderWidth: '1',
+          borderColor: "#0db1c0",
+          fontColor: 'white',
+          defaultFontSize: 20,
+          data: currentY
+        }
+      ]
+    },
+    options: {
+      elements: {
+        point: {
+          radius: 0,
+          hitRadius: 5,
+          hoverRadius: 5
+        }
       },
-      options: {
-        elements: {
-          point: {
-            radius: 0,
-            hitRadius: 5,
-            hoverRadius: 5
-          }
-        },
-        legend: {
-          display: false
-        },
-        scales: {
-          yAxes: [
-            {
-              display: true,
-              position: 'right',
-              ticks: {
-                beginAtZero: false,
-                fontSize: 15,
-                fontColor: 'white',
-                callback: function(value, index, values) {
-                  return '$' + value;
-                }
-              },
-            }
-          ],
-          xAxes: [
-            {
-              gridLines:{
-                display: false
-              },
-              ticks: {
-                autoSkipPadding: 20,
-                fontColor: 'white',
-                fontSize: 15,
-                maxRotation: 0,
-                minRotation: 0,
-                
+      legend: {
+        display: false
+      },
+      scales: {
+        yAxes: [
+          {
+            display: true,
+            position: 'right',
+            ticks: {
+              beginAtZero: false,
+              fontSize: 15,
+              fontColor: 'white',
+              callback: function(value, index, values) {
+                return '$' + value;
               }
-            }
-          ],
-        },
-        layout: {
-          padding: {
-            left: 0,
-            right: 0,
-            top: 0,
-            bottom: 0
+            },
           }
+        ],
+        xAxes: [
+          {
+            gridLines:{
+              display: false
+            },
+            ticks: {
+              autoSkipPadding: 20,
+              fontColor: 'white',
+              fontSize: 15,
+              maxRotation: 0,
+              minRotation: 0,
+              
+            }
+          }
+        ],
+      },
+      layout: {
+        padding: {
+          left: 0,
+          right: 0,
+          top: 0,
+          bottom: 0
         }
       }
-    });
+    }
+  });
+  
+  function updateChart(x){
+    if(x == 1){ //month
+      
+      chart.data.datasets[0].data = data.monthHistoricY;
+      chart.data.labels = data.monthHistoricTime;
+    }
+    else if(x == 2){ //1 year
+      chart.data.datasets[0].data = data.yearHistoricY;
+      chart.data.labels = data.yearHistoricTime;
+      chart.data.datasets[0].pointRadius = 0;
+    }
+    else if(x == 3){ // 5 years
+
+      chart.data.datasets[0].data = data.historicY;
+      chart.data.labels = data.historicYears;
+      chart.data.datasets[0].pointRadius = 0;
+    }
+    chart.update();
   }
+  updateChart(x);
+}
+//===============================================ETH END===================================================
+//===============================================DOGE START================================================
+
+//===============================================DOGE END==================================================
 }

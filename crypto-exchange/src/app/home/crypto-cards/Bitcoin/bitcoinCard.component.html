@@ -2,17 +2,21 @@
 <div class="container mb-5">
   <div id="card-intro" class="card mt-3 shadow">
     <div class="card-body">
-      <h3 class="card-title">Bitcoin (BTC) - ${{crypto | number:'1.2-2'}}</h3>
-      <canvas id="myChart"></canvas>
-
+      <h3 class="card-title">
+        <img class="mb-2" id="crypto-x" src="../assets/btc.png" alt="btc" width="35px" height="35px"/>
+        Bitcoin (BTC) - ${{crypto | number:'1.2-2'}}
+      </h3>
+      <div id = "chartContainer">
+        <canvas id="myChart"></canvas>
+      </div>
       <div class="d-flex justify-content-end mt-3">
         <div class="btn-group btn-group-toggle" data-toggle="buttons">
           <label class="btn btn-outline-primary active">
-            <input type="radio" name="options" id="option1" autocomplete="off" checked (click) = "chartMonth()">1 Month</label>
+            <input type="radio" name="options" id="option1" autocomplete="off" checked (click) = "changeData(1)">1 Month</label>
           <label class="btn btn-outline-primary">
-            <input type="radio" name="options" id="option2" autocomplete="off" (click) = "chartYear()">1 Year</label>
+            <input type="radio" name="options" id="option2" autocomplete="off" (click) = "changeData(2)">1 Year</label>
           <label class="btn btn-outline-primary">
-            <input type="radio" name="options" id="option3" autocomplete="off" (click) = "chartFiveYears()">5 Years</label>
+            <input type="radio" name="options" id="option3" autocomplete="off" (click) = "changeData(3)">5 Years</label>
         </div>
       </div>
       <hr style="background-color:#303b47;">
