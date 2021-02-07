@@ -3,4 +3,4 @@ A demo of a cryptocurrency exchange website. Cryptocurrency information pulled f
 AngularJS used.
 
 # Demo
-![](\crypto-exchange\src\assets\demo.gif)
+![](demo.gif)
