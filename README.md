@@ -2,6 +2,6 @@
 A demo of a cryptocurrency exchange website. Cryptocurrency information pulled from CryptoCompare API.
 AngularJS used.
 
-![](assets/screenshot_1.png)
+<img src="crypto-exchange\src\assets\screenshot_1.PNG">
 
 # Demo
