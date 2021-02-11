@@ -3,9 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Chart } from 'chart.js'
 import { convertUpdateArguments } from '@angular/compiler/src/compiler_util/expression_converter';
+import { environment } from 'src/environments/environment';
 
-const API_KEY = '621def888ea82cbdd98c3ba9f10fbd487e222c0663c524f468b1c3495192cb89'
-
+const API_KEY = environment.API_KEY;
 @Injectable({
   providedIn: 'root'
 })
